@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	html {
+		-webkit-tap-highlight-color: transparent;
+		overflow: auto; /* فعال کردن اسکرول در هر دو جهت (افقی و عمودی) */
+		-webkit-overflow-scrolling: touch; /* اسکرول نرم در موبایل‌ها */
+	}
+
+	/* Safe area padding for iOS */
+	.pb-safe {
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+
+	/* RTL support */
+	html[dir='rtl'] {
+		text-align: right;
+	}
+
+	/* RTL specific utilities */
+	.rtl\:space-x-reverse > * + * {
+		--tw-space-x-reverse: 1;
+	}
+
+	/* Remove transitions */
+	* {
+		transition: none !important; /* حذف تمامی ترنسیشن‌ها */
+	}
+
+	/* Global border radius */
+	input,
+	button,
+	select,
+	textarea {
+		@apply rounded-xl;
+	}
+
+	.rounded-default {
+		@apply rounded-xl;
+	}
+}
+
+/* Dark mode */
+.dark {
+	color-scheme: dark;
+}
+
+/* Ensure consistent text colors */
+.dark .text-gray-900 {
+	@apply text-white;
+}
+
+.dark .text-gray-800 {
+	@apply text-gray-200; /* تغییر به رنگ سفید کمی روشن‌تر */
+}
+
+.dark .text-gray-700 {
+	@apply text-gray-300; /* تغییر به رنگ خاکی کمی روشن‌تر */
+}
+
+.dark .text-gray-600 {
+	@apply text-gray-400; /* روشن‌تر از رنگ پیشین */
+}
+
+/* Ensure consistent background colors */
+.dark .bg-white {
+	@apply bg-gray-800; /* تیره‌تر از رنگ سفید */
+}
+
+.dark .bg-gray-50 {
+	@apply bg-gray-700; /* رنگ خاکی تیره */
+}
+
+.dark .bg-gray-100 {
+	@apply bg-gray-600; /* خاکی تیره‌تر */
+}
+
+.dark .bg-gray-200 {
+	@apply bg-gray-500; /* رنگ روشن‌تر خاکی */
+}
+
+/* Ensure consistent border colors */
+.dark .border-gray-200 {
+	@apply border-gray-600; /* تغییر به رنگ خاکی تیره‌تر */
+}
+
+.dark .border-gray-300 {
+	@apply border-gray-500; /* رنگ خاکی متوسط */
+}

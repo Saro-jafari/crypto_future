@@ -1,0 +1,43 @@
+{
+  "common": {
+    "trade": "معامله",
+    "chart": "نمودار",
+    "wallet": "کیف پول",
+    "history": "تاریخچه",
+    "settings": "تنظیمات",
+    "coins": "ارزها",
+    "loading": "در حال بارگذاری...",
+    "error": "خطایی رخ داد",
+    "retry": "تلاش مجدد"
+  },
+  "settings": {
+    "theme": "تم",
+    "language": "زبان",
+    "lightMode": "روشن",
+    "darkMode": "تاریک"
+  },
+  "trade": {
+    "selectCoin": "انتخاب ارز دیجیتال",
+    "long": "خرید",
+    "short": "فروش",
+    "leverage": "اهرم",
+    "margin": "وجه تضمین",
+    "takeProfit": "حد سود",
+    "stopLoss": "حد ضرر",
+    "openPosition": "باز کردن معامله",
+    "liquidationPrice": "قیمت لیکوئید",
+    "positionSize": "حجم معامله",
+    "entryPrice": "قیمت ورود"
+  },
+  "wallet": {
+    "balance": "موجودی",
+    "totalPnl": "سود/زیان کل",
+    "reset": "بازنشانی کیف پول"
+  },
+  "coins": {
+    "search": "جستجوی ارزها...",
+    "asset": "دارایی",
+    "price": "قیمت",
+    "24hChange": "تغییرات ۲۴ ساعت"
+  }
+}

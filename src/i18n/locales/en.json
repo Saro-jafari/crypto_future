@@ -1,0 +1,43 @@
+{
+  "common": {
+    "trade": "Trade",
+    "chart": "Chart",
+    "wallet": "Wallet",
+    "history": "History",
+    "settings": "Settings",
+    "coins": "Coins",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry"
+  },
+  "settings": {
+    "theme": "Theme",
+    "language": "Language",
+    "lightMode": "Light",
+    "darkMode": "Dark"
+  },
+  "trade": {
+    "selectCoin": "Select Cryptocurrency",
+    "long": "Long",
+    "short": "Short",
+    "leverage": "Leverage",
+    "margin": "Margin",
+    "takeProfit": "Take Profit",
+    "stopLoss": "Stop Loss",
+    "openPosition": "Open Position",
+    "liquidationPrice": "Liquidation Price",
+    "positionSize": "Position Size",
+    "entryPrice": "Entry Price"
+  },
+  "wallet": {
+    "balance": "Balance",
+    "totalPnl": "Total PnL",
+    "reset": "Reset Wallet"
+  },
+  "coins": {
+    "search": "Search coins...",
+    "asset": "Asset",
+    "price": "Price",
+    "24hChange": "24h Change"
+  }
+}
