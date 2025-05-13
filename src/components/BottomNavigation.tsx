@@ -11,7 +11,7 @@ const BottomNavigation: React.FC<Props> = ({ activeTab, onTabChange }) => {
 	const { t } = useTranslation();
 
 	return (
-		<nav className="fixed bottom-0 left-0 right-0 w-full z-50 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700 pb-safe block">
+		<nav className="max-w-lg  mx-auto fixed bottom-0 left-0 right-0 w-full z-50 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700 pb-safe block">
 			<div className="grid h-16 grid-cols-6">
 				<button
 					onClick={() => onTabChange('trade')}
