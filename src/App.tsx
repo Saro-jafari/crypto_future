@@ -19,7 +19,7 @@ type Tab = 'trade' | 'chart' | 'coins' | 'wallet' | 'history' | 'settings';
 function App() {
 	const { t } = useTranslation();
 	const { setCoins, selectedCoin } = useTradeStore();
-	const [activeTab, setActiveTab] = useState<Tab>('trade');
+	const [activeTab, setActiveTab] = useState<Tab>('coins');
 	const { theme } = useTheme();
 	console.log(theme, 'theme');
 	const {

@@ -35,7 +35,16 @@ const Coins: React.FC = () => {
 				return sortOrder === 'asc' ? comparison : -comparison;
 			});
 	}, [coins, search, sortKey, sortOrder]);
-
+	if (!coins || coins.length === 0) {
+		return (
+			<div className="flex justify-center items-center h-48">
+				<svg className="animate-spin h-5 w-5 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+					<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+					<path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 11-8 8z" />
+				</svg>
+			</div>
+		);
+	}
 	const toggleSort = (key: SortKey) => {
 		if (sortKey === key) {
 			setSortOrder(order => (order === 'asc' ? 'desc' : 'asc'));
@@ -73,19 +82,19 @@ const Coins: React.FC = () => {
 					<table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
 						<thead>
 							<tr className="bg-gray-50 dark:bg-gray-900">
-								<th className="px-4 py-3 text-left cursor-pointer" onClick={() => toggleSort('name')}>
+								<th className="px-2 py-3 text-left cursor-pointer" onClick={() => toggleSort('name')}>
 									<div className="flex items-center space-x-1">
 										<span className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('coins.asset')}</span>
 										<SortIcon active={sortKey === 'name'} />
 									</div>
 								</th>
-								<th className="px-4 py-3 text-right cursor-pointer" onClick={() => toggleSort('price')}>
+								<th className="px-2 py-3 text-right cursor-pointer" onClick={() => toggleSort('price')}>
 									<div className="flex items-center justify-end space-x-1">
 										<span className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('coins.price')}</span>
 										<SortIcon active={sortKey === 'price'} />
 									</div>
 								</th>
-								<th className="px-4 py-3 text-right cursor-pointer" onClick={() => toggleSort('change')}>
+								<th className="px-2 py-3 text-right cursor-pointer" onClick={() => toggleSort('change')}>
 									<div className="flex items-center justify-end space-x-1">
 										<span className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('coins.24hChange')}</span>
 										<SortIcon active={sortKey === 'change'} />
@@ -96,19 +105,19 @@ const Coins: React.FC = () => {
 						<tbody className="divide-y divide-gray-200 dark:divide-gray-700">
 							{filteredAndSortedCoins.map(coin => (
 								<tr key={coin.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleCoinSelect(coin)}>
-									<td className="px-4 py-4 whitespace-nowrap">
+									<td className="px-2 py-4 whitespace-nowrap">
 										<div className="flex items-center space-x-3 rtl:space-x-reverse">
 											<img src={coin.image} alt={coin.name} className="w-8 h-8 rounded-full" />
 											<div>
 												<div className="font-medium dark:text-white">{coin.name}</div>
-												<div className="text-sm text-gray-500 dark:text-gray-400">{coin.symbol.toUpperCase()}</div>
+												<div className="text-xs text-gray-500 dark:text-gray-400">{coin.symbol.toUpperCase()}</div>
 											</div>
 										</div>
 									</td>
-									<td className="px-4 py-4 text-right whitespace-nowrap">
+									<td className="px-2 py-4 text-right whitespace-nowrap">
 										<div className="font-medium dark:text-white">{formatCurrency(coin.current_price)}</div>
 									</td>
-									<td className="px-4 py-4 text-right whitespace-nowrap">
+									<td className="px-2 py-4 text-right whitespace-nowrap">
 										<span
 											className={`${
 												coin.price_change_percentage_24h >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
