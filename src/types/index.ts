@@ -22,6 +22,8 @@ export type Position = {
   closePrice?: number;
   pnl?: number;
   pnlPercentage?: number;
+  currentPnl: number;
+  currentPnlPercentage: number;
 };
 
 export type WalletState = {

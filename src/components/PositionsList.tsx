@@ -39,8 +39,7 @@ const PositionsList: React.FC = () => {
               const coin = coins.find((c) => c.id === position.coinId);
               if (!coin) return null;
               
-              const { pnl, pnlPercentage } = calculatePnl(position, coin.current_price);
-              const isProfitable = pnl > 0;
+              const isProfitable = position.currentPnl > 0;
               
               return (
                 <tr key={position.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
@@ -74,12 +73,12 @@ const PositionsList: React.FC = () => {
                   </td>
                   <td className="py-3 px-4 text-right whitespace-nowrap font-mono">
                     <span className={isProfitable ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}>
-                      {isProfitable ? '+' : ''}{formatCurrency(pnl)}
+                      {isProfitable ? '+' : ''}{formatCurrency(position.currentPnl)}
                     </span>
                   </td>
                   <td className="py-3 px-4 text-right whitespace-nowrap font-mono">
                     <span className={isProfitable ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}>
-                      {isProfitable ? '+' : ''}{formatPercentage(pnlPercentage)}
+                      {isProfitable ? '+' : ''}{formatPercentage(position.currentPnlPercentage)}
                     </span>
                   </td>
                   <td className="py-3 px-4 text-center whitespace-nowrap">

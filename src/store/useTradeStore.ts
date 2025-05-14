@@ -11,6 +11,7 @@ interface TradeStore {
 	activePositions: Position[];
 	closedPositions: Position[];
 	isLoading: boolean;
+	lastPriceUpdate: number;
 
 	// Actions
 	setCoins: (coins: Coin[]) => void;
@@ -23,6 +24,7 @@ interface TradeStore {
 }
 
 const DEFAULT_BALANCE = 10000; // $10,000 USDT
+const UPDATE_INTERVAL = 1000; // 1 second
 
 const useTradeStore = create<TradeStore>()(
 	persist(
@@ -37,14 +39,35 @@ const useTradeStore = create<TradeStore>()(
 			activePositions: [],
 			closedPositions: [],
 			isLoading: false,
+			lastPriceUpdate: Date.now(),
 
 			// Actions
-			setCoins: coins => set({ coins }),
+			setCoins: coins => {
+				set(state => {
+					const now = Date.now();
+					// Only update if enough time has passed
+					if (now - state.lastPriceUpdate >= UPDATE_INTERVAL) {
+						return { 
+							coins,
+							lastPriceUpdate: now
+						};
+					}
+					return { coins };
+				});
+				// Update PnL after price update
+				get().updatePositionsPnl();
+			},
 
 			setSelectedCoin: coin => set({ selectedCoin: coin }),
 
 			updateCoinPrice: (coinId, price) => {
 				set(state => {
+					const now = Date.now();
+					// Only update if enough time has passed
+					if (now - state.lastPriceUpdate < UPDATE_INTERVAL) {
+						return state;
+					}
+
 					const updatedCoins = state.coins.map(coin => {
 						if (coin.id === coinId) {
 							return { ...coin, current_price: price };
@@ -52,7 +75,6 @@ const useTradeStore = create<TradeStore>()(
 						return coin;
 					});
 
-					
 					let updatedSelectedCoin = state.selectedCoin;
 					if (state.selectedCoin?.id === coinId) {
 						updatedSelectedCoin = {
@@ -64,10 +86,11 @@ const useTradeStore = create<TradeStore>()(
 					return {
 						coins: updatedCoins,
 						selectedCoin: updatedSelectedCoin,
+						lastPriceUpdate: now,
 					};
 				});
 
-				// Check for TP/SL triggers and liquidations after price update
+				// Update PnL after price update
 				get().updatePositionsPnl();
 			},
 
@@ -86,6 +109,8 @@ const useTradeStore = create<TradeStore>()(
 						id: `pos_${Date.now()}`,
 						openTime: Date.now(),
 						positionSize,
+						currentPnl: 0,
+						currentPnlPercentage: 0,
 						...positionData,
 					};
 
@@ -107,7 +132,7 @@ const useTradeStore = create<TradeStore>()(
 					const position = state.activePositions.find(p => p.id === positionId);
 					if (!position) return state;
 
-					const { pnl } = calculatePnl(position, currentPrice);
+					const { pnl, pnlPercentage } = calculatePnl(position, currentPrice);
 
 					// Create closed position record
 					const closedPosition: Position = {
@@ -115,7 +140,7 @@ const useTradeStore = create<TradeStore>()(
 						closeTime: Date.now(),
 						closePrice: currentPrice,
 						pnl,
-						pnlPercentage: (pnl / position.margin) * 100,
+						pnlPercentage,
 					};
 
 					// Update wallet
@@ -135,13 +160,15 @@ const useTradeStore = create<TradeStore>()(
 			updatePositionsPnl: () => {
 				set(state => {
 					const { activePositions, coins } = state;
+					let totalUnrealizedPnl = 0;
 
-					// Check each position for TP/SL triggers or liquidation
-					activePositions.forEach(position => {
+					// Update PnL for each position
+					const updatedPositions = activePositions.map(position => {
 						const coin = coins.find(c => c.id === position.coinId);
-						if (!coin) return;
+						if (!coin) return position;
 
 						const currentPrice = coin.current_price;
+						const { pnl, pnlPercentage } = calculatePnl(position, currentPrice);
 
 						// Check for TP/SL or liquidation
 						if (
@@ -149,12 +176,30 @@ const useTradeStore = create<TradeStore>()(
 							shouldTriggerStopLoss(position, currentPrice) ||
 							isLiquidated(position, currentPrice)
 						) {
-							// Automatically close the position
+							// Close the position
 							get().closePosition(position.id, currentPrice);
+							return position;
 						}
+
+						totalUnrealizedPnl += pnl;
+
+						return {
+							...position,
+							currentPnl: pnl,
+							currentPnlPercentage: pnlPercentage,
+						};
 					});
 
-					return {}; // No state changes here, they happen in closePosition
+					// Update wallet with unrealized PnL
+					const updatedWallet = {
+						...state.wallet,
+						totalPnl: state.wallet.totalPnl + totalUnrealizedPnl,
+					};
+
+					return {
+						activePositions: updatedPositions,
+						wallet: updatedWallet,
+					};
 				});
 			},
 
